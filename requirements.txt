@@ -1,3 +1,4 @@
 selenium
 openai
 webdriver-manager
+fastapi[all]
