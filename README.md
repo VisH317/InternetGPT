@@ -7,3 +7,10 @@ _Idea:_ a simple python library that pairs web scraping along with chatgpt API c
    * Can be done with selenium, going onto google and extracting the top 5 web results for a question and scraping the pages
    * Take the text points on that page and embed them
    * Take embeddings with least distance to the input question and pass them through the assistant
+
+**Todos:**
+ * Setup frontend for demo
+ * Publish as a package
+ * Brainstorm new features
+   * security rate limiters?
+ * setup testing framework to run on
