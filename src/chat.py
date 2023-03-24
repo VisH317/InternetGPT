@@ -17,7 +17,7 @@ class Chat:
         """
         embeddings = self.scraper.query(question)
         embed_question = openai.Embedding.create(input=question, model="text-embedding-ada-002")
-        similar = self.get_closest_embedding(embeddings, embed_question, max_similar)
+        similar = self._get_closest_embedding(embeddings, embed_question, max_similar)
         context = "\n###\n".join(similar)
         response = openai.ChatCompletion.create(
             model="gpt-3.5-turbo",
@@ -31,10 +31,13 @@ class Chat:
         return response
 
 
-    def get_closest_embedding(self, embeddings, embed_question, max_similar):
+    def _get_closest_embedding(self, embeddings, embed_question, max_similar):
         distances = distances_from_embeddings(embed_question, embeddings, distance_metric="cosine")
         distances.sort()
         most_similar = []
         for idx, d, in enumerate(distances[:max_similar]):
             most_similar.append(embeddings[idx])
         return most_similar
+    
+    def change_prompt(self, prompt: str):
+        self.add_prompt = prompt
