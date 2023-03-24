@@ -14,3 +14,14 @@ _Idea:_ a simple python library that pairs web scraping along with chatgpt API c
  * Brainstorm new features
    * security rate limiters?
  * setup testing framework to run on
+ * Setup augmented memory to pass into model
+ * SQLite database to save extracted text and urls
+ * multithreading for more requests
+
+**Things for the paper:**
+ * prompt engineering description
+ * Overall architecture explanation
+ * Caching embeddings
+ * Sending multiple prompts
+ * Providing the direct information for question answering
+ * Do another example with open source version (e.g. BERT) to directly insert differentiable neural dictionary into the model
