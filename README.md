@@ -18,6 +18,10 @@ _Idea:_ a simple python library that pairs web scraping along with chatgpt API c
  * SQLite database to save extracted text and urls
  * multithreading for more requests
 
+**Next Cycle Todos:**
+ * Write tests
+ * Caching, Multiprocessing for requests, recursive search based on unknown keywords
+
 **Things for the paper:**
  * prompt engineering description
  * Overall architecture explanation

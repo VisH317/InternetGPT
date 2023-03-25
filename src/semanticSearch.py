@@ -10,33 +10,36 @@ class SemanticSearch:
         self.urls_to_embedding = {}
         self.model = "text-embedding-ada-002"
         self.scraper = Scraper(2)
+        
 
-    def add_embeds(self, urls, embeddings):
-        for ix,url in enumerate(urls): self.urls_to_embedding[url] = embeddings[ix]
-
-    def get_embeds(self, question: str, context: list(str)):
-        question_embed = openai.Embedding.create(input=[question], model=self.model)
-        context_embed = openai.Embedding.create(input=context, model=self.model)
-
-    def get_subseq_embeds(self, context: str):
-        # for now - just search with the context itself. Later: maybe search absed on unknown keywords and take the context around it as well
-        urls, embeds = self.scraper.query(context)
-        distances = distances_from_embeddings(context, embds, distance_metric="cosine")
-        vals = zip(urls, distances)
-        vals = sorted(vals, key=self.sort_embeds)
-        ret_ctx = ""
-        for txt, d in vals[:self.subseq]: ret_ctx += "; " + txt;
-        return ret_ctx
-
-    def _get_closest_embedding(self, text, embeddings, embed_question):
+    def get_closest_embedding(self, question: str, context: list(str)):
+        embed_question, embeddings = self.get_embeds(question, context)
         distances = distances_from_embeddings(embed_question, embeddings, distance_metric="cosine")
-        vals = zip(text, distances)
+        vals = zip(context, distances)
         vals = sorted(vals, key=self.sort_embeds)
         most_similar = []
         for txt, d in vals[:self.first_level]:
             ctx = self.get_subseq_embeds(txt)
             most_similar.append(ctx)
         return most_similar
+
+
+    def get_embeds(self, question: str, context: list(str)):
+        question_embed = openai.Embedding.create(input=[question], model=self.model)
+        context_embed = openai.Embedding.create(input=context, model=self.model)
+        return question_embed, context_embed
+
+
+    def get_subseq_embeds(self, context: str):
+        # for now - just search with the context itself. Later: maybe search based on unknown keywords and take the context around it as well
+        urls, embeds = self.scraper.query(context)
+        ctx, emb = self.get_embeds(context, embeds)
+        distances = distances_from_embeddings(ctx, emb, distance_metric="cosine")
+        vals = zip(urls, distances)
+        vals = sorted(vals, key=self.sort_embeds)
+        ret_ctx = context
+        for txt,_ in vals[:self.subseq]: ret_ctx += "; " + txt;
+        return ret_ctx
     
     
     def sort_embeds(self, val1, val2):
