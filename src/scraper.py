@@ -17,6 +17,7 @@ class Scraper:
         self.driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=chrome_options)
         self.links = []
         self.max_links = max_links
+        self.url_cache = {}
 
 
     def query(self, question: str):
@@ -44,16 +45,23 @@ class Scraper:
     def _get_link_text(self):
         text = []
         for link in self.links:
+            if link in self.url_cache.keys():
+                for t in self.url_cache[link]:
+                    text.append(t)
+                continue
+
+            self.url_cache[link] = []
             self.driver.get(link)
-            linkText = re.split('.\n', "".join(self.driver.find_element(By.TAG_NAME, 'body').text))
+            linkText = re.split(r"(?<!^)\s*[.\n]+\s*(?!$)", "".join(self.driver.find_element(By.TAG_NAME, 'body').text))
+            print(linkText)
             print(len(re.split(r".,\n\s", linkText[3])))
+
             ret = []
             for txt in linkText.copy():
-                print(": ", txt)
-                print(len(re.split(", |. |\n| ", txt)))
-                if len(re.split(", |. |\n| ", txt))>=5: 
-                    print("BRUH")
+                if len(re.split(", |. |\n| ", txt))>=10: 
+                    self.url_cache[link].append(txt)
                     ret.append(txt)
             print(len(ret))
+            
             for t in ret: text.append(t)
         return text

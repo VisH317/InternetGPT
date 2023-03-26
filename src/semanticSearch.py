@@ -32,14 +32,7 @@ class SemanticSearch:
 
     def get_subseq_embeds(self, context: str):
         # for now - just search with the context itself. Later: maybe search based on unknown keywords and take the context around it as well
-        urls, embeds = self.scraper.query(context)
-        ctx, emb = self.get_embeds(context, embeds)
-        distances = distances_from_embeddings(ctx, emb, distance_metric="cosine")
-        vals = zip(urls, distances)
-        vals = sorted(vals, key=self.sort_embeds)
-        ret_ctx = context
-        for txt,_ in vals[:self.subseq]: ret_ctx += "; " + txt;
-        return ret_ctx
+        pass
     
     
     def sort_embeds(self, val1, val2):

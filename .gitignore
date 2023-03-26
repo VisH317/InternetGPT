@@ -1,2 +1,4 @@
 env
 downloads
+test/.pytest_cache
+test/__pycache__/*
