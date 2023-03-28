@@ -21,7 +21,7 @@ class Chat:
         response = openai.ChatCompletion.create(
             model="gpt-3.5-turbo",
             messages=[
-                {"role": "system", "content": "You are an assistant who will complete the following task based on a provided context and input. If the solution to the task based on the input is not within the context, answer using your own knowledge. The context includes ten sequences of words separated by ###."},
+                {"role": "system", "content": f"You are an assistant who will complete the following task based on a provided context and input. If the solution to the task based on the input is not within the context, answer using your own knowledge. The context includes ten sequences of words separated by ###. Task: {self.add_prompt}"},
                 {"role": "user", "content": f"Input: {question}.\nContext: {context}"}
             ],
             temperature=0.35,

@@ -19,8 +19,22 @@ _Idea:_ a simple python library that pairs web scraping along with chatgpt API c
  * multithreading for more requests
 
 **Next Cycle Todos:**
- * Write tests
- * Caching, Multiprocessing for requests, recursive search based on unknown keywords
+ * Write tests - DONE
+ * Caching, Multiprocessing for requests, recursive search based on unknown keywords - DONE except for multiprocessing, prob not required 
+
+**Dev Cycle 3 Todos:**
+ * Testing:
+   * Run individual prompt tests
+   * Run tests with OpenAI API
+ * Deployment:
+   * Setup CI/CD  
+   * Publish as python project
+ * New Features (next dev cycle):
+   * Redis/sqlite caching option
+   * Rate limiting and other limits onto OpenAI models
+   * Scraper multithreading
+   * Configuration for threshold of requiring searching up a word
+ * Results for paper: compare recursive search (next dev cycle)
 
 **Things for the paper:**
  * prompt engineering description
