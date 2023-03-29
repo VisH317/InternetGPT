@@ -6,7 +6,7 @@ from typing import NamedTuple, List
 import tiktoken
 
 import nltk
-nltk.download('stopwords')
+#nltk.download('stopwords')
 from nltk.corpus import stopwords
 
 class WordEntry(NamedTuple):
@@ -32,7 +32,7 @@ class RecurseEmbeds:
 
     def get_subseq_embeds(self, context: str, doc: List[str]):
         sub = self.get_word_counts(doc, context)
-        sub = sorted(sub, key=lambda val: val[1])[:self.subseq]
+        sub = sorted(sub, key=lambda val: val.tfidf)[:self.subseq]
         urls_list = []
         words_map = []
         text_list = []

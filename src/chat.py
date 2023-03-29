@@ -13,6 +13,7 @@ load_dotenv("../.env")
 class Chat:
     def __init__(self, additional_prompt: str, num_levels: int = 2, first_level: int = 10, subseq: int = 2):
         self.scraper = Scraper()
+        print("scraper initialized")
         openai.api_key = os.environ.get("OPENAI_KEY")
         self.add_prompt = additional_prompt
         self.current_requests = 0
