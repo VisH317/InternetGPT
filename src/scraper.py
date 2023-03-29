@@ -53,15 +53,12 @@ class Scraper:
             self.url_cache[link] = []
             self.driver.get(link)
             linkText = re.split(r"(?<!^)\s*[.\n]+\s*(?!$)", "".join(self.driver.find_element(By.TAG_NAME, 'body').text))
-            print(linkText)
-            print(len(re.split(r".,\n\s", linkText[3])))
 
             ret = []
             for txt in linkText.copy():
                 if len(re.split(", |. |\n| ", txt))>=10: 
                     self.url_cache[link].append(txt)
                     ret.append(txt)
-            print(len(ret))
             
             for t in ret: text.append(t)
         return text

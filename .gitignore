@@ -2,3 +2,5 @@ env
 downloads
 test/.pytest_cache
 test/__pycache__/*
+.env
+src/__pycache__

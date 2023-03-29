@@ -4,3 +4,11 @@ webdriver-manager
 fastapi[all]
 pytest
 nltk
+python-dotenv
+matplotlib
+plotly
+pandas
+scipy
+numpy
+scikit-learn
+tiktoken

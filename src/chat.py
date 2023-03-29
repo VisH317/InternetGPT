@@ -1,15 +1,19 @@
 import openai
 
+import os
 import openai
 from openai.embeddings_utils import distances_from_embeddings
 from scraper import Scraper
 from multiprocessing import Process
 from semanticSearch import SemanticSearch
+from dotenv import load_dotenv
+
+load_dotenv("../.env")
 
 class Chat:
-    def __init__(self, openai_key, additional_prompt: str, num_levels: int = 2, first_level: int = 10, subseq: int = 2):
-        self.scraper = Scraper
-        openai.api_key = openai_key
+    def __init__(self, additional_prompt: str, num_levels: int = 2, first_level: int = 10, subseq: int = 2):
+        self.scraper = Scraper()
+        openai.api_key = os.environ.get("OPENAI_KEY")
         self.add_prompt = additional_prompt
         self.current_requests = 0
         self.ss = SemanticSearch(num_levels, first_level, subseq)
