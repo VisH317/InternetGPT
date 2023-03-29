@@ -25,7 +25,7 @@ _Idea:_ a simple python library that pairs web scraping along with chatgpt API c
 **Dev Cycle 3 Todos:**
  * Testing:
    * Run individual prompt tests
-   * Run tests with OpenAI API
+   * Run functionality tests with OpenAI API - almost done 
  * Deployment:
    * Setup CI/CD  
    * Publish as python project
