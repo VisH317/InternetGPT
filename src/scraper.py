@@ -25,7 +25,7 @@ class Scraper:
         self.search(question)
         text = self._get_link_text()
         urls = self.links
-        self.reset()
+        #self.driver.close() # later close and reopen, setup pool for multiple connections
         return urls, text
 
     def reset(self):

@@ -14,14 +14,14 @@ def sort_embeds(val1, val2):
     else: return 0
 
 class SemanticSearch:
-    def __init__(self, num_levels: int = 2, first_level: int = 10, subseq: int = 2):
+    def __init__(self, num_levels: int = 2, first_level: int = 1, subseq: int = 1):
         self.num_levels = num_levels
         self.first_level = first_level
         self.subseq = subseq
         self.urls_to_embedding = {}
         self.model = "text-embedding-ada-002"
         self.scraper = Scraper(2)
-        self.recurse = RecurseEmbeds()
+        self.recurse = RecurseEmbeds(subseq)
         self.tokenizer = tiktoken.get_encoding("cl100k_base")
         
 

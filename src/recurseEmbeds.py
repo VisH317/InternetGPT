@@ -23,7 +23,7 @@ def compare_word_entry(we1: WordEntry, we2: WordEntry):
     else: return 0
 
 class RecurseEmbeds:
-    def __init__(self, subseq_cmp: int = 2, tf_idf_thresh: float = 2.0):
+    def __init__(self, subseq_cmp: int = 1, tf_idf_thresh: float = 0.01):
         self.subseq = subseq_cmp
         self.tf_idf_thresh = tf_idf_thresh
         self.scraper = Scraper(2)
@@ -39,6 +39,7 @@ class RecurseEmbeds:
         for s in sub:
             print("doing")
             urls, text = self.scraper.query(context)
+            print("text: ", text)
             for u in urls: urls_list.append(u)
             for t in text: 
                 text_list.append(t)
@@ -46,7 +47,7 @@ class RecurseEmbeds:
         ctx, emb = self.get_embeds(context, text_list)
         distances = distances_from_embeddings(ctx, emb, distance_metric="cosine")
         vals = zip(urls, distances)
-        vals = sorted(vals, key=self.sort_embeds)
+        vals = sorted(vals, key=lambda val: val[1])
         ret_ctx = context
         for txt,_ in vals[:self.subseq]: ret_ctx += "; " + txt;
         return ret_ctx
@@ -55,11 +56,12 @@ class RecurseEmbeds:
     def get_embeds(self, question: str, context: List[str]):
         newcontext = []
         for c in context: newcontext.append(self.tokenizer.encode(c))
-        question_embed = openai.Embedding.create(input=[tokenizer.encode(question)], engine=self.model)
+        print("newctx: ",len(context))
+        question_embed = openai.Embedding.create(input=[self.tokenizer.encode(question)], engine=self.model)["data"]
         context_embed = openai.Embedding.create(input=newcontext, engine=self.model)["data"]
         ctx = []
         for c in context_embed: ctx.append(c['embedding'])
-        return question_embed["data"][0]["embedding"], ctx
+        return question_embed[0]["embedding"], ctx
     
     
     def get_word_counts(self, doc: List[str], selected_doc: str) -> List[WordEntry]:
@@ -69,7 +71,7 @@ class RecurseEmbeds:
         # calculate IDF matrix
         # multiply and sort for highest score and search based on that as well as surrounding context words
         # instead: calculate overall idf frequency, then go through term frequency in each and determine if below a desired threshold to require searching up
-        filtered_doc = [w.lower() for w in selected_doc.split(" ") if w.replace(",", "").replace(";", "").replace(":", "").lower() not in stopwords.words("english")]
+        filtered_doc = [w.lower().replace(",", "").replace(";", "").replace(":", "").strip().lower() for w in selected_doc.split(" ") if w.replace(",", "").replace(";", "").replace(":", "").strip().lower() not in stopwords.words("english")]
         doc.append(selected_doc)
 
         # calculate counts for IDF
@@ -77,7 +79,7 @@ class RecurseEmbeds:
         for d in doc:
             found = []
             print(d.split(" "))
-            for w in [w.replace(",", "").replace(";", "").replace(":", "").lower() for w in d.split(" ")]:
+            for w in [w.replace(",", "").replace(";", "").replace(":", "").strip().lower() for w in d.split(" ") if w.replace(",", "").replace(";", "").replace(":", "").strip().lower() not in stopwords.words("english")]:
                 if w not in found: 
                     if w not in idf_cnt.keys(): idf_cnt[w] = 1
                     else: idf_cnt[w]+=1
@@ -94,4 +96,4 @@ class RecurseEmbeds:
             tfidf = (filtered_doc.count(w)/len(filtered_doc))*idf_cnt[w]
             if w not in ret and tfidf>=self.tf_idf_thresh: doc_ctx.append(WordEntry(w, tfidf))
         
-        return doc_ctx
+        return doc_ctx[:1]
