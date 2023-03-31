@@ -21,7 +21,7 @@ class Chat:
 
 
     def query(self, question: str):
-        urls, context = self.scraper.query(question)
+        q, urls, context = self.scraper.query(question)
         context = "\n\n###\n\n".join(self.ss.get_closest_embedding(question, context))
         response = openai.ChatCompletion.create(
             model="gpt-3.5-turbo",

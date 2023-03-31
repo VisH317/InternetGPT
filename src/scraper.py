@@ -4,6 +4,8 @@ from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
 from webdriver_manager.chrome import ChromeDriverManager
+from concurrent.futures import ThreadPoolExecutor, as_completed
+from typing import List
 
 
 class Scraper:
@@ -19,6 +21,15 @@ class Scraper:
         self.max_links = max_links
         self.url_cache = {}
 
+    def query_parallel(self, questions: List[str]):
+        result = []
+        with ThreadPoolExecutor(max_workers=4) as executor:
+            result = executor.map(self.query, questions)
+        result_map = {}
+        for question, url, text in result:
+            result_map[question] = (url, text)
+        return result_map
+
 
     def query(self, question: str):
         print("test")
@@ -26,7 +37,7 @@ class Scraper:
         text = self._get_link_text()
         urls = self.links
         #self.driver.close() # later close and reopen, setup pool for multiple connections
-        return urls, text
+        return question, urls, text
 
     def reset(self):
         self.driver.close()
