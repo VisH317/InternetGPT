@@ -11,15 +11,25 @@ from typing import List
 class Scraper:
 
     def __init__(self, max_links: int = 1):
+        # chrome_options = Options()
+        # chrome_options.add_argument('--headless')
+        # chrome_options.add_argument('--no-sandbox')
+        # chrome_options.add_argument('--disable-dev-shm-usage')
+
+        # self.driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=chrome_options)
+        self.links = []
+        self.max_links = max_links
+        self.url_cache = {}
+
+
+    def create_chrome_driver(self):
         chrome_options = Options()
         chrome_options.add_argument('--headless')
         chrome_options.add_argument('--no-sandbox')
         chrome_options.add_argument('--disable-dev-shm-usage')
 
-        self.driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=chrome_options)
-        self.links = []
-        self.max_links = max_links
-        self.url_cache = {}
+        return webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=chrome_options)
+
 
     def query_parallel(self, questions: List[str]):
         result = []
@@ -33,19 +43,16 @@ class Scraper:
 
     def query(self, question: str):
         print("test")
-        self.search(question)
-        text = self._get_link_text()
+        driver = self.create_chrome_driver()
+        self.search(question, driver)
+        text = self._get_link_text(driver)
         urls = self.links
-        #self.driver.close() # later close and reopen, setup pool for multiple connections
+        driver.quit()
         return question, urls, text
 
-    def reset(self):
-        self.driver.close()
-        self.links.clear()
-
-    def search(self, question: str):
-        self.driver.get(f"https://www.google.com/search?q={question}")
-        results = self.driver.find_elements(By.CSS_SELECTOR, "div.g")
+    def search(self, question: str, driver):
+        driver.get(f"https://www.google.com/search?q={question}")
+        results = driver.find_elements(By.CSS_SELECTOR, "div.g")
         self.links.clear()
         for result in results[:(min(len(results), self.max_links))]:
             link = result.find_element(By.TAG_NAME, "a")
@@ -53,7 +60,7 @@ class Scraper:
             self.links.append(href)
 
 
-    def _get_link_text(self):
+    def _get_link_text(self, driver):
         text = []
         for link in self.links:
             if link in self.url_cache.keys():
@@ -62,8 +69,8 @@ class Scraper:
                 continue
 
             self.url_cache[link] = []
-            self.driver.get(link)
-            linkText = re.split(r"(?<!^)\s*[.\n]+\s*(?!$)", "".join(self.driver.find_element(By.TAG_NAME, 'body').text))
+            driver.get(link)
+            linkText = re.split(r"(?<!^)\s*[.\n]+\s*(?!$)", "".join(driver.find_element(By.TAG_NAME, 'body').text))
 
             ret = []
             for txt in linkText.copy():
