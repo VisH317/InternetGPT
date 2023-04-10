@@ -26,4 +26,9 @@ def test_in_memory_scraper_cache():
 
 def test_scraper_multithreading():
     # will be implemented once multithreading for scraper is complete
-    pass
+    s = Scraper()
+    start = time.time()
+    res = s.query("What is multithreading?")
+    end = time.time()
+    elapsed = end - start
+    assert elapsed<10000

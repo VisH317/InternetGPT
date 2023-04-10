@@ -32,7 +32,8 @@ _Idea:_ a simple python library that pairs web scraping along with chatgpt API c
  * New Features (next dev cycle):
    * Redis/sqlite caching option
    * Rate limiting and other limits onto OpenAI models
-   * Scraper multithreading - very important
+   * Scraper multithreading - very important, COMPLETED
+   * Multi-level recursive embedding search
    * Embedder multithreading if possible as well
    * Configuration for threshold of requiring searching up a word
  * Results for paper: compare recursive search (next dev cycle)

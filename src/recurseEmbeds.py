@@ -31,26 +31,25 @@ class RecurseEmbeds:
         self.tokenizer = tiktoken.get_encoding("cl100k_base")
 
     def get_subseq_embeds(self, context: str, doc: List[str]):
-        sub = self.get_word_counts(doc, context)
+        sub = self.get_word_counts(doc, context) # get and sort tfidf counts to determine the rarest/most important words
         sub = sorted(sub, key=lambda val: val.tfidf)[:self.subseq]
         urls_list = []
         words_map = []
         text_list = []
+
         for s in sub:
-            print("doing")
-            urls, text = self.scraper.query(context)
-            print("text: ", text)
+            urls, text = self.scraper.query(context) # create new search based on the received context
             for u in urls: urls_list.append(u)
             for t in text: 
                 text_list.append(t)
                 words_map.append(s.word)
-        ctx, emb = self.get_embeds(context, text_list)
+        ctx, emb = self.get_embeds(context, text_list) # get embeds for the context and the text list
         distances = distances_from_embeddings(ctx, emb, distance_metric="cosine")
         vals = zip(urls, distances)
         vals = sorted(vals, key=lambda val: val[1])
         ret_ctx = context
         for txt,_ in vals[:self.subseq]: ret_ctx += "; " + txt;
-        return ret_ctx
+        return ret_ctx # return closest entries to the desired context
     
 
     def get_embeds(self, question: str, context: List[str]):
