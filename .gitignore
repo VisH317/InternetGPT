@@ -5,3 +5,5 @@ test/__pycache__/*
 .env
 src/__pycache__/*
 .pytest_cache
+build
+dist
