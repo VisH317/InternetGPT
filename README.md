@@ -36,6 +36,7 @@ _Idea:_ a simple python library that pairs web scraping along with chatgpt API c
    * Multi-level recursive embedding search
    * Embedder multithreading if possible as well
    * Configuration for threshold of requiring searching up a word
+   * System prompt embedding and search
  * Results for paper: compare recursive search (next dev cycle)
 
 **Things for the paper:**

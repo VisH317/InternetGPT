@@ -9,6 +9,9 @@ import nltk
 #nltk.download('stopwords')
 from nltk.corpus import stopwords
 
+
+
+
 class WordEntry(NamedTuple):
     word: str
     tfidf: float
