@@ -1,28 +1,9 @@
 ## InternetGPT
-_Idea:_ a simple python library that pairs web scraping along with chatgpt API calls to create chat clients that can access the internet easily without the restriction of no internet that chatgpt has
+> A simple python library that pairs web scraping along with chatgpt API calls to create chat clients that can access the internet easily without the restriction of no internet that chatgpt has
 
-**Requirements:**
- * ChatGPT API to call and respond based on the input question
- * Web Scraper to get data:
-   * Can be done with selenium, going onto google and extracting the top 5 web results for a question and scraping the pages
-   * Take the text points on that page and embed them
-   * Take embeddings with least distance to the input question and pass them through the assistant
+Uses OpenAI embeddings and chat completion to research through the internet, search up rare phrases, organize data, and create a smart prompt with context
 
 **Todos:**
- * Setup frontend for demo
- * Publish as a package
- * Brainstorm new features
-   * security rate limiters?
- * setup testing framework to run on
- * Setup augmented memory to pass into model
- * SQLite database to save extracted text and urls
- * multithreading for more requests
-
-**Next Cycle Todos:**
- * Write tests - DONE
- * Caching, Multiprocessing for requests, recursive search based on unknown keywords - DONE except for multiprocessing, prob not required 
-
-**Dev Cycle 3 Todos:**
  * Testing:
    * Run individual prompt tests
    * Run functionality tests with OpenAI API - almost done 
